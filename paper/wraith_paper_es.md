@@ -1300,6 +1300,12 @@ Se publican el checkpoint empaquetado (74.9 MB), los motores de inferencia (GPU 
 ![Figura 14: Arquitectura del modelo](charts/14_model_architecture.png)
 *Figura 14: Arquitectura completa Wraith-186M.*
 
+![Figura 20: Proyección de scaling](charts/20_scaling_projection.png)
+*Figura 20: Proyección de scaling estilo BitNet Fig. 3. Wraith medido a 186M/1.6B (círculo azul) + baseline fp16 arch-idéntico medido (cuadrado rojo). Curva azul = proyección Wraith vía ley de Chinchilla (Hoffmann 2022, α=0.34, β=0.28, E=1.69) calibrada con nuestra medición a 186M. Triángulos = puntos medidos de BitNet b1.58 y LLaMA fp16 citados de Ma et al. 2024, Tabla 1 (corpus de evaluación distinto al nuestro — no son directamente comparables en eje Y, solo el patrón cualitativo lo es). Estrella verde = proyección Wraith 700M/100B ≈ 11.4 PPL. Nota: BitNet b1.58 alcanza paridad con fp16 recién a 3B; nuestra proyección sugiere que Wraith podría hacerlo desde tamaños mucho menores, pero esto requiere validación empírica a 700M+.*
+
+![Figura 21: Frontera de Pareto](charts/21_pareto_frontier.png)
+*Figura 21: Frontera de Pareto capacidad vs calidad a escala ~3B. Eje X = bits por peso (log), eje Y = PPL. Puntos medidos: BitNet b1.58 (1.58 bits, 9.91 PPL) y LLaMA fp16 (16 bits, 10.04 PPL) ambos de Ma 2024 Tabla 1. Wraith 3B (3.17 bits, 9.62 PPL proyectado) ocupa el sweet spot Shannon-óptimo: suficiente capacidad para evitar el data-hunger de BitNet, suficiente restricción para evitar el over-parametrizado fp16. Puntos 4-bit QAT e int8 QAT son estimaciones de literatura, no mediciones de este trabajo.*
+
 ---
 
 ## Apéndice B: Reproducibilidad

@@ -1316,6 +1316,12 @@ The 74.9 MB packed checkpoint is released openly; the inference engines (GPU and
 ![Figure 14: Model architecture](charts/14_model_architecture.png)
 *Figure 14: Full Wraith-186M architecture.*
 
+![Figure 20: Scaling projection](charts/20_scaling_projection.png)
+*Figure 20: Scaling projection in the style of BitNet Fig. 3. Wraith measured at 186M/1.6B (blue circle) + arch-identical fp16 LLaMA baseline measured (red square). Blue curve = Wraith projection via Chinchilla law (Hoffmann 2022, α=0.34, β=0.28, E=1.69) calibrated against our 186M measurement. Triangles = measured points for BitNet b1.58 and LLaMA fp16 cited from Ma et al. 2024, Table 1 (evaluation corpus differs from ours — absolute y-values are not directly comparable, only the qualitative pattern is). Green star = projected Wraith 700M/100B ≈ 11.4 PPL. Note: BitNet b1.58 only reaches fp16 parity at 3B; our projection suggests Wraith could do so at much smaller scales, but this requires empirical validation at 700M+.*
+
+![Figure 21: Pareto frontier](charts/21_pareto_frontier.png)
+*Figure 21: Pareto frontier capacity vs quality at ~3B scale. X-axis = bits per weight (log), Y-axis = PPL. Measured points: BitNet b1.58 (1.58 bits, 9.91 PPL) and LLaMA fp16 (16 bits, 10.04 PPL), both from Ma 2024 Table 1. Wraith 3B (3.17 bits, 9.62 PPL projected) occupies the Shannon-optimal sweet spot: enough capacity to avoid BitNet's data-hunger, restricted enough to avoid fp16's over-parameterization. 4-bit QAT and int8 QAT points are literature estimates, not measurements from this work.*
+
 ---
 
 ## Appendix B: Reproducibility, Availability and IP
