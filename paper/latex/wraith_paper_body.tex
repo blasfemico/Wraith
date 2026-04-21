@@ -339,19 +339,10 @@ distinct ``pain point'' with respect to token efficiency}:
 scale}\label{empirical-evidence-of-token-consumption-at-deployable-scale}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Params
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Actual tokens consumed
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Tokens/param
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Source
-\end{minipage} \\
+Model & Params & Actual tokens consumed & Tokens/param & Source \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -368,6 +359,7 @@ Pythia 2.8B (fp16) & 2.8B & 300B & 107 & EleutherAI \\
 Phi-3 mini 3.8B & 3.8B & 3.3T & 868 & Microsoft HF \\
 \end{longtable}
 }
+}
 
 \textbf{Key observation}: BitNet at 2,000 tok/param is \textbf{233× more
 data-hungry than Wraith 186M} at 8.6 tok/param (measured). Given the
@@ -383,18 +375,11 @@ holds proportionally at scale, then the token budget to reach
 their own production conditions) projects as:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Scale
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\textbf{Wraith (hypothetically optimal)}\textasciitilde50-100 tok/param
-at quality-target
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-BitNet (empirical)\textasciitilde2,000 tok/param
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Modern fp16 (production)\textasciitilde500-2,500 tok/param
-\end{minipage} \\
+Scale & \textbf{Wraith (hypothetically optimal)}\textasciitilde50-100 tok/param
+at quality-target & BitNet (empirical)\textasciitilde2,000 tok/param & Modern fp16 (production)\textasciitilde500-2,500 tok/param \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -409,6 +394,7 @@ Modern fp16 (production)\textasciitilde500-2,500 tok/param
 \textasciitilde14-70T (LLaMA-3 70B = 15T; the current frontier already
 consumes 1.5T-15T) \\
 \end{longtable}
+}
 }
 
 \textbf{Critical clarification on fp16}: the current state of the art
@@ -457,15 +443,10 @@ budget.
 \textbf{Provenance of comparative datapoints (for auditability):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Value
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Source
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Type
-\end{minipage} \\
+Value & Source & Type \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -489,6 +470,7 @@ fp16 modern 500--2500 tok/param in production & TinyLlama 2727 (Zhang
 2024), Qwen2.5 7B 2571 (Yang 2024), LLaMA-3 70B 214 (Dubey 2024),
 Mistral 7B \textasciitilde1100 (Jiang 2023) & \textbf{Literature} \\
 \end{longtable}
+}
 }
 
 \textbf{Explicitly NOT measured}: we did not retrain BitNet or any
@@ -727,17 +709,10 @@ memory.
 \textbf{Three-level precision hierarchy:}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Level
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Type
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Bits
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Role
-\end{minipage} \\
+Level & Type & Bits & Role \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -749,6 +724,7 @@ by div 258 \\
 Forward (inference) & ternary & 3.17 & 9-level composite weight via
 Dualwire \\
 \end{longtable}
+}
 }
 
 This hierarchy lets the model train with accumulation precision
@@ -840,13 +816,10 @@ limits.
 \textbf{Empirical evidence of convergence:}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Evidence
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-What it demonstrates
-\end{minipage} \\
+Evidence & What it demonstrates \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -863,6 +836,7 @@ stable density distributions per layer \\
 8/8 benchmarks Wraith \textgreater{} fp16 & The advantage is consistent
 cross-domain, not a dataset artifact \\
 \end{longtable}
+}
 }
 
 \textbf{Why does BitNet not adopt the full NPQN paradigm?} Three
@@ -1164,7 +1138,8 @@ under the same data budget.
 With \(\alpha = 1.81\) calibrated on Wraith at step 13,021:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
 & Wraith & fp16 baseline \\
 \midrule\noalign{}
@@ -1175,6 +1150,7 @@ Predicted gap (nats) & 0.33 & 0.65 \\
 Observed gap (nats) & 0.72 & 1.07 \\
 Observed ratio gap (val/train PPL, post-hoc) & 1.37× & 3.59× \\
 \end{longtable}
+}
 }
 
 Both \textbf{order and approximate magnitude match}: the fp16 model
@@ -1205,19 +1181,10 @@ Contemporary small-to-medium open-source models are trained massively
 as of 2025:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Parameters
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Training tokens
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-tok/param
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Factor over Chinchilla
-\end{minipage} \\
+Model & Parameters & Training tokens & tok/param & Factor over Chinchilla \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1234,6 +1201,7 @@ Mistral 7B (Mistral AI, 2023) & 7B & \textasciitilde8T &
 OLMo 2 7B (Groeneveld et al., 2025) & 7B & \textasciitilde4T & 557 &
 28× \\
 \end{longtable}
+}
 }
 
 \textbf{Virtually no competitive open-source model published in
@@ -1444,7 +1412,8 @@ its usable effective capacity.
 \textbf{Architecture} (identical for both models):
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
 Parameter & Value \\
 \midrule\noalign{}
@@ -1461,11 +1430,13 @@ max\_seq\_len & 1024 \\
 Parameters & 186M \\
 \end{longtable}
 }
+}
 
 \textbf{Training} (identical except LR and linear-layer type):
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
 Parameter & Value \\
 \midrule\noalign{}
@@ -1481,16 +1452,13 @@ Label smoothing & 0.02 \\
 Seed & 0 \\
 \end{longtable}
 }
+}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Wraith
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-fp16 baseline
-\end{minipage} \\
+ & Wraith & fp16 baseline \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1501,6 +1469,7 @@ Initialization & Wraith scheme & LLaMA scheme (std=0.02,
 \(1/\sqrt{2L}\)) \\
 Tokens consumed & 1.65B & 1.60B \\
 \end{longtable}
+}
 }
 
 The learning rates are optimal per method: the 13× ratio is consistent
@@ -1513,19 +1482,10 @@ higher learning rates than fp16 models (Ma et al., 2024).
 better.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Dataset
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Domain
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 baseline
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Ratio
-\end{minipage} \\
+Dataset & Domain & Wraith & fp16 baseline & Ratio \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1542,6 +1502,7 @@ SlimPajama (last chunk) & in-dist & \textbf{83.34} & 185.84 &
 \textbf{2.23×} \\
 \end{longtable}
 }
+}
 
 \emph{See Figure 1.}
 
@@ -1555,16 +1516,10 @@ checkpoints --- this is the apples-to-apples comparison to confront
 Wraith with LLaMA-fp16 under an identical measurement protocol.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 baseline
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Ratio
-\end{minipage} \\
+ & Wraith & fp16 baseline & Ratio \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1580,6 +1535,7 @@ lower} \\
 Gap (nats, post-hoc) & \textbf{0.315} & 1.279 & \textbf{0.964 nats
 less} \\
 \end{longtable}
+}
 }
 
 \textbf{Important observation on the train vs.~held-out ratio}: the
@@ -1601,7 +1557,8 @@ with the PAC-Bayes prediction of Section 3.}
 \textbf{Table 3: Zero-shot accuracy.} Higher is better.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
 Benchmark & Chance & Wraith & fp16 baseline \\
 \midrule\noalign{}
@@ -1612,6 +1569,7 @@ LAMBADA (last-word acc) & 0\% & \textbf{1.8\%} & 0.0\% \\
 Winogrande & 50\% & \textbf{50.91\%} & 48.78\% \\
 ARC-Easy & 25\% & \textbf{29.12\%} & 27.90\% \\
 \end{longtable}
+}
 }
 
 \emph{See Figure 5.} Both models are in the sub-Chinchilla regime (1.6B
@@ -1626,7 +1584,8 @@ to predict any last word correctly (0 of 500 samples), while Wraith hits
 Training throughput (measured on H100 (RunPod)):
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
 & Wraith & fp16 baseline \\
 \midrule\noalign{}
@@ -1639,6 +1598,7 @@ Cost (Colab H100 @ \$1.80/h) & \$19.19 & \$16.00 \\
 Val PPL achieved & \textbf{107.19} & 613.96 \\
 \end{longtable}
 }
+}
 
 The fp16 baseline is 16\% faster per raw token (no quantization
 overhead). However, to reach Wraith's quality (val PPL
@@ -1649,17 +1609,10 @@ making Wraith \textbf{11.2× cheaper at equivalent quality}.
 GPU reference costs (2026):
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-GPU
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Provider
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\$/hour
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Typical use
-\end{minipage} \\
+GPU & Provider & \$/hour & Typical use \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1673,6 +1626,7 @@ H100 SXM 80GB & AWS (on-demand) & \$12.29 & Enterprise \\
 H100 SXM 80GB & Lambda & \$2.99 & Research \\
 \end{longtable}
 }
+}
 
 \emph{Google Colab H100: 18 compute units/hour, 100 units for \$9.99,
 with weekly usage caps.}
@@ -1685,19 +1639,10 @@ Compression}\label{storage-and-compression}
 \textbf{Table 4: Weight storage comparison.}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Format
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Size
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Bits/weight
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Compression
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Lossless?
-\end{minipage} \\
+Format & Size & Bits/weight & Compression & Lossless? \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1708,6 +1653,7 @@ Wraith (int8 latent) & 372 MB & 8.0 per channel & 1.0× & --- \\
 & \textbf{4.97×} & \textbf{Yes} \\
 Shannon limit (\(2 \log_2 3\)) & 73.6 MB & 3.17 & 5.05× & --- \\
 \end{longtable}
+}
 }
 
 \emph{See Figure 7.}
@@ -1726,23 +1672,10 @@ M\textgreater1 GEMM kernel is not yet implemented.
 directly measured with NVML hardware counter.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Configuration
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith tok/s
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 tok/s
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-VRAM
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Power
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-J/tok
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-tokens/Wh
-\end{minipage} \\
+Configuration & Wraith tok/s & fp16 tok/s & VRAM & Power & J/tok & tokens/Wh \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1759,6 +1692,7 @@ CUDA Graphs B=8 (cuBLAS fp16)* & 2,994 & 2,996 & --- & 81.7 W & 0.027 &
 CUDA Graphs B=16 (cuBLAS fp16)* & \textbf{4,844} & 4,836 & --- & 105.9 W
 & 0.022 & \textbf{164,501} \\
 \end{longtable}
+}
 }
 
 *Batched regimes (B\textgreater1) use the cuBLAS fp16 path with weight
@@ -1795,17 +1729,10 @@ only; the packed M\textgreater1 GEMM kernel is on the roadmap.
 Benchmarks segmented by integration level.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Full integrated engine
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-tok/s
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-ms/token
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-J/tok
-\end{minipage} \\
+Full integrated engine & tok/s & ms/token & J/tok \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1814,6 +1741,7 @@ J/tok
 19.2 & 1.329 \\
 Numba JIT I2\_S (full engine) & 46.8 & 21.4 & --- \\
 \end{longtable}
+}
 }
 
 \textbf{Honest note on isolated kernels:} in isolated micro-benchmarks
@@ -1848,19 +1776,10 @@ decision.
 estimate for CPU).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Hardware
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Power
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-J/token
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-mJ/token
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-tok/Wh
-\end{minipage} \\
+Hardware & Power & J/token & mJ/token & tok/Wh \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -1875,6 +1794,7 @@ GPU Wraith legacy eager forward (no CUDA Graphs) & 109.9 W & 0.278 &
 277.6 & 12,967 \\
 CPU Wraith (Ryzen 5700G, C++ AVX2) & 65.0 W & 1.329 & 1,328.8 & 2,709 \\
 \end{longtable}
+}
 }
 
 \textbf{The packed DualBit engine delivers the energy-efficiency
@@ -1917,7 +1837,8 @@ model weights classified by the \texttt{(wa,\ wb)} combination that
 produces them:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
 Level & \((w_a, w_b)\) & Value \(W\) & Count & Fraction \\
 \midrule\noalign{}
@@ -1934,6 +1855,7 @@ Level & \((w_a, w_b)\) & Value \(W\) & Count & Fraction \\
 7 & \((+1, 0)\) & \(+sc\) & 18,526,772 & 9.98\% \\
 8 & \((+1, +1)\) & \(+(sc+sf)\) & 24,181,875 & 13.02\% \\
 \end{longtable}
+}
 }
 
 \textbf{Key findings:}
@@ -2054,19 +1976,10 @@ has four components:
 RTX 5070 Blackwell sm\_120).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Shape (N, K)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-cuBLAS fp16
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Our kernel
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Packed 2-bit kernel
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Speedup vs.~cuBLAS
-\end{minipage} \\
+Shape (N, K) & cuBLAS fp16 & Our kernel & Packed 2-bit kernel & Speedup vs.~cuBLAS \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2080,6 +1993,7 @@ Speedup vs.~cuBLAS
 (50257, 1024) lm\_head & 185.4 μs & 199 μs & 199 μs & 0.93× \\
 \end{longtable}
 }
+}
 
 The packed kernel beats cuBLAS by 2.3--2.6× on the dominant transformer
 shapes (Q/K/V/O, gate/up, down). On lm\_head (\(N = 50,257\)), the
@@ -2090,7 +2004,8 @@ automatic fallback when \(N\) exceeds a threshold.
 \textbf{Table 10: Fused QKV vs.~3 separate kernels (shape 1024×1024).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.60\linewidth}@{}}
 \toprule\noalign{}
 Operation & Separate (3 launches) & Fused (1 launch) & Speedup \\
 \midrule\noalign{}
@@ -2100,6 +2015,7 @@ Operation & Separate (3 launches) & Fused (1 launch) & Speedup \\
 QKV isolated kernel & 44.7 μs & \textbf{20.7 μs} & \textbf{2.16×} \\
 GateUp (shape 4608×1024) & 29.7 μs & 28.7 μs & 1.03× \\
 \end{longtable}
+}
 }
 
 Fused QKV wins big because 3 batches of \(N=1024\) blocks saturate SMs
@@ -2112,17 +2028,10 @@ a single kernel already saturates and fusion only saves launch overhead
 more optimization.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Configuration
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-VRAM (MB)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Throughput (tok/s)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Latency (ms/tok)
-\end{minipage} \\
+Configuration & VRAM (MB) & Throughput (tok/s) & Latency (ms/tok) \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2134,6 +2043,7 @@ Materialized fp16 baseline (Table 5) & 1031.2 & 387.3 & 2.58 \\
 + Fused QKV + GateUp kernels & \textbf{114.7} & \textbf{501.0} &
 \textbf{2.00} \\
 \end{longtable}
+}
 }
 
 \textbf{Net result vs.~materialized fp16 baseline:} - \textbf{VRAM:
@@ -2150,19 +2060,10 @@ packed weights are never materialized to fp16 during decode.
 NVML hardware counter).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Configuration
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-GPU power (W)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-J/token
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-mJ/token
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-tokens/Wh
-\end{minipage} \\
+Configuration & GPU power (W) & J/token & mJ/token & tokens/Wh \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2172,6 +2073,7 @@ Materialized fp16 baseline (CUDA Graphs B=1) & 38.8 & 0.084 & 84 &
 \textbf{Full packed DualBit engine (this work)} & \textbf{26.0} &
 \textbf{0.064} & \textbf{64} & \textbf{56,250} \\
 \end{longtable}
+}
 }
 
 The full engine not only beats the baseline in throughput and memory but
@@ -2224,25 +2126,10 @@ LLaMA-style architectures assumed. Runtime formula:
 \texttt{Total\ ≈\ 0.5·N\ (packed\ weights)\ +\ 0.5·V·d\ (packed\ emb)\ +\ KV\_fp16\ +\ overhead}.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llllllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Scale
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-d\_model × L × d\_ff
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Weights 2-bit runtime
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Emb 2-bit
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-KV fp16 ctx=2048
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Overhead
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\textbf{Total runtime VRAM}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 equiv
-\end{minipage} \\
+Scale & d\_model × L × d\_ff & Weights 2-bit runtime & Emb 2-bit & KV fp16 ctx=2048 & Overhead & \textbf{Total runtime VRAM} & fp16 equiv \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2268,6 +2155,7 @@ Wraith 405B & 16384×126×53248 & 203 GB & 410 MB & 4.1 GB & 2 GB &
 Wraith 1T & 16384×216×53248 & 500 GB & 410 MB & 7 GB & 4 GB &
 \textbf{\textasciitilde511 GB} & \textasciitilde2 TB \\
 \end{longtable}
+}
 }
 
 \textbf{Compression ratio runtime vs.~fp16}: \textbf{\textasciitilde3.9×
@@ -2296,22 +2184,10 @@ Bytes/token read \(\approx\) 52 GB (weights + emb + KV + overhead).
 Assumed efficiency \(=\) 40\% of peak bandwidth.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-GPU
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-VRAM
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Peak bandwidth
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Effective bandwidth (40\%)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\textbf{Projected tok/s}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(/hour (2026) | **\)/1M tok (single-user)**
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\end{minipage} \\
+GPU & VRAM & Peak bandwidth & Effective bandwidth (40\%) & \textbf{Projected tok/s} & \(/hour (2026) | **\)/1M tok (single-user)** &  \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2331,6 +2207,7 @@ MI300X 192GB (AMD) & 192 GB & 5.3 TB/s & 2,120 GB/s & \textasciitilde41
 \textbf{B200 180GB (Blackwell DC)} & 180 GB & 8.0 TB/s & 3,200 GB/s &
 \textbf{\textasciitilde62} & \textasciitilde\$6.00 & \textbf{\$27} \\
 \end{longtable}
+}
 }
 
 \textbf{Critical notes on projections:}
@@ -2403,19 +2280,10 @@ than fp16 mixed-precision}.
 \textbf{Table: Training cost comparison (training memory per param).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}>{\raggedright\arraybackslash}p{0.180\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Approach
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Master
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Optimizer
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Total training
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Total inference
-\end{minipage} \\
+Approach & Master & Optimizer & Total training & Total inference \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2428,6 +2296,7 @@ m+v (8B) & \textbf{\textasciitilde12 B/param} & \textbf{0.2 B/param} \\
 latent a+b (2B) + fp32 per-group (\textasciitilde0.5B) &
 \textbf{\textasciitilde6.5 B/param} (measured) & \textbf{0.4 B/param} \\
 \end{longtable}
+}
 }
 
 \emph{Wraith numbers directly measured on the published checkpoint (step
@@ -2623,21 +2492,10 @@ across users.
 projection in Table 13 of §4.11:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith runtime packed (VRAM)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 LLaMA equivalent
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Ratio
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-80 GB datacenter GPUs (Wraith)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-80 GB GPUs (fp16)
-\end{minipage} \\
+Model & Wraith runtime packed (VRAM) & fp16 LLaMA equivalent & Ratio & 80 GB datacenter GPUs (Wraith) & 80 GB GPUs (fp16) \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2662,6 +2520,7 @@ consumer (RTX 5090 32GB) & 1× DC \\
 DC \\
 \end{longtable}
 }
+}
 
 \textbf{On-disk storage} (5-trits/byte compression from §2.5, Shannon
 optimum): an additional 20\% below runtime 2-bit. For 186M: 74.9 MB disk
@@ -2679,15 +2538,10 @@ infrastructure cost.
 \textbf{Training improvements (v2 core):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Feature
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Description
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Expected impact
-\end{minipage} \\
+Feature & Description & Expected impact \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2706,19 +2560,15 @@ Required for camera-ready \\
 the per-method-optimal methodology \\
 \end{longtable}
 }
+}
 
 \textbf{Inference acceleration (v2 kernels):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Feature
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Description
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Expected impact
-\end{minipage} \\
+Feature & Description & Expected impact \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2735,19 +2585,15 @@ kernels (I2\_S/TL1/TL2), called twice for Dualwire & Match BitNet CPU
 speeds \\
 \end{longtable}
 }
+}
 
 \textbf{Architecture extensions (v2 research):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}>{\raggedright\arraybackslash}p{0.313\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Feature
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Description
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Expected impact
-\end{minipage} \\
+Feature & Description & Expected impact \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2761,6 +2607,7 @@ Fixed KV memory regardless of sequence length \\
 (35--45\% active), deep layers at full density & Additional compression
 with minimal loss \\
 \end{longtable}
+}
 }
 
 \subsubsection{6.4 GPU Kernel Exploration: initial negative results and
@@ -2777,17 +2624,10 @@ We adapted and tested existing kernels operating on pure ternary
 weights:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Kernel
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Architecture
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-vs.~cuBLAS fp16
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Why it lost on consumer Blackwell
-\end{minipage} \\
+Kernel & Architecture & vs.~cuBLAS fp16 & Why it lost on consumer Blackwell \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2799,6 +2639,7 @@ Custom WMMA & \texttt{nvcuda::wmma} fp16 TC & 0.15--0.72× & No
 Official BitNet W2A8 & dp4a + LOP3 unpack & 0.24× & Same architectural
 dp4a limitation on consumer Blackwell \\
 \end{longtable}
+}
 }
 
 Identified root cause: \textbf{on consumer Blackwell, int8 tensor cores
@@ -2817,17 +2658,10 @@ BitNet 1.58-bit), the custom kernels operate directly on 2-bit packed
 weights without fp16 materialization. Results on the same RTX 5070:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}>{\raggedright\arraybackslash}p{0.230\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Kernel
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Architecture
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-vs.~cuBLAS fp16
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Why it won
-\end{minipage} \\
+Kernel & Architecture & vs.~cuBLAS fp16 & Why it won \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2843,6 +2677,7 @@ saturation on small shapes \\
 lookup & N/A (no baseline) & Eliminates \textasciitilde100 MB fp16
 materialization \\
 \end{longtable}
+}
 }
 
 \textbf{Methodological lesson}: Phase 1's negative results do NOT
@@ -2871,23 +2706,10 @@ grad checkpoint add \textasciitilde10--15\% to peak. Price: Colab Pro
 H100 @ \$1.80/hr effective.}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lllllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith train VRAM
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 train VRAM
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-BitNet train VRAM
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Wraith H100
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-fp16 H100
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-BitNet H100
-\end{minipage} \\
+Model & Wraith train VRAM & fp16 train VRAM & BitNet train VRAM & Wraith H100 & fp16 H100 & BitNet H100 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2902,6 +2724,7 @@ BitNet H100
 405B & 2.63 TB & 6.48 TB & 4.86 TB & 33× & 81× & 61× \\
 1T & 6.50 TB & 16.0 TB & 12.0 TB & 82× & 200× & 150× \\
 \end{longtable}
+}
 }
 
 \textbf{Wraith vs.~BitNet training advantage}: Wraith requires
@@ -2920,21 +2743,10 @@ baseline: 2 bytes/param + KV. KV computed with d\_head=128, ctx=16k,
 fp16 (K+V).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith runtime packed
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 runtime
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Ratio
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-80GB GPUs Wraith
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-80GB GPUs fp16
-\end{minipage} \\
+Model & Wraith runtime packed & fp16 runtime & Ratio & 80GB GPUs Wraith & 80GB GPUs fp16 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2959,6 +2771,7 @@ Ratio
 7× DC & 26× DC \\
 \end{longtable}
 }
+}
 
 \textbf{Table 17: Inference VRAM with Wraith v2 (roadmap: Dualwire-TQ on
 KV cache + CLRG) @ ctx=16k.}
@@ -2969,21 +2782,10 @@ Runtime weights stay at current 0.5 bytes/param (a 5-trits/byte-decoder
 kernel would drop weights to 0.4 B/param, -20\% additional).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith v1 runtime
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Wraith v2 runtime (KV-TQ)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-fp16 runtime
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-v1->v2 improvement
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-vs.~fp16
-\end{minipage} \\
+Model & Wraith v1 runtime & Wraith v2 runtime (KV-TQ) & fp16 runtime & v1->v2 improvement & vs.~fp16 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2998,6 +2800,7 @@ vs.~fp16
 1T & 557 GB & \textbf{513 GB} & 2.06 TB & 1.1× & \textbf{4.0×} \\
 \end{longtable}
 }
+}
 
 \textbf{Table 18: Long-context serving (1M tokens) with Dualwire-TQ and
 CLRG (proposed).}
@@ -3008,21 +2811,10 @@ eviction of irrelevant tokens), Wraith dominates the long-context
 regime. GPUs assume H100 80GB datacenter.}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llllll@{}}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}>{\raggedright\arraybackslash}p{0.147\linewidth}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-KV fp16 @ 1M ctx
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-KV with Dualwire-TQ
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-KV with TQ + CLRG
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Total Wraith packed + KV-TQ+CLRG
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-H100s (80GB)
-\end{minipage} \\
+Model & KV fp16 @ 1M ctx & KV with Dualwire-TQ & KV with TQ + CLRG & Total Wraith packed + KV-TQ+CLRG & H100s (80GB) \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -3036,6 +2828,7 @@ H100s (80GB)
 1T & 11.0 TB & 2.7 TB & 688--1,650 GB & 1.2--2.2 TB &
 \textbf{15--28×} \\
 \end{longtable}
+}
 }
 
 \textbf{Executive reading of projections}:
