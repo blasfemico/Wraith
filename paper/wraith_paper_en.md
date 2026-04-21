@@ -137,6 +137,20 @@ The three regimes have distinct pain points with respect to data:
 
 *Methodological note*: the 50–100 tok/param ratio projected for Wraith at deployable scale assumes that production-ready quality is above val_ppl 107 (the validation regime of our 186M experiment) and is obtained by conservative extrapolation from the measured 8.6 tok/param. This range is to be validated empirically in the 2B phase proposed in Section 6.3. **The "sweet spot" claim is strictly a hypothesis at deployable scale**; what is already measured is that Wraith-186M reaches consistent advantages (2.29× train PPL, 5.73× val PPL WikiText-103) over an architecturally identical fp16 at identical budget.
 
+**Provenance of comparative datapoints (for auditability):**
+
+| Value | Source | Type |
+|---|---|---|
+| Wraith 8.6 tok/param (186M at val_ppl 107) | This work, Sec. 4.2 | **Measured** |
+| Wraith 74.9 MB packed, 501 tok/s, 64 mJ/tok, 114 MB VRAM | This work, Sec. 4.7–4.10 | **Measured** |
+| LLaMA fp16 baseline (613.96 val, 170.85 train PPL) | This work — architecture-identical retrain, same seed, tokens, optimizer | **Measured** |
+| fp16 Chinchilla 20 tok/param | Hoffmann et al. 2022, *"Training Compute-Optimal Large Language Models"*, arxiv 2203.15556 | **Literature** |
+| BitNet b1.58 33 tok/param (3B at 100B tokens) | Ma et al. 2024, *"The Era of 1-bit LLMs"*, arxiv 2402.17764 (Sec 3, RedPajamas baselines table) | **Literature** |
+| BitNet b1.58 2B-4T release (2000 tok/param) | Ma et al. 2025, arxiv 2504.12285 (Microsoft open-source release) | **Literature** |
+| fp16 modern 500–2500 tok/param in production | TinyLlama 2727 (Zhang 2024), Qwen2.5 7B 2571 (Yang 2024), LLaMA-3 70B 214 (Dubey 2024), Mistral 7B ~1100 (Jiang 2023) | **Literature** |
+
+**Explicitly NOT measured**: we did not retrain BitNet or any modern fp16 model. Comparison points for BitNet and production-scale fp16 come from their official papers or HuggingFace model cards. The only retrained item in this work is the architecture-identical fp16 baseline at 186M, with the sole purpose of isolating the effect of the NPQN pipeline vs. the fp16-masters paradigm under identical compute and data budget.
+
 ![Figure 19: Convergence efficiency](charts/19_convergence_efficiency.png)
 
 *Figure 19: Wraith's positioning as the **capacity/data sweet spot**. Left: schematic convergence curves — fp16 (over-capacity, high plateau from overfitting, requires 200+ tok/param to compensate), BitNet (under-capacity, low plateau from insufficient expressivity, requires 2000+ tok/param to compensate), Wraith (3.17-bit optimum, converges to better PPL with fewer tokens). Right: tokens needed per scale — Wraith consistently requires **fewer tokens than BitNet and fp16 for deployable quality** due to balanced informational capacity.*
