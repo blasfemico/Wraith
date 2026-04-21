@@ -39,7 +39,8 @@ Todos los ingredientes individuales tienen prior art (WAGE 2018, NITI 2020, BitN
 | Métrica | Wraith-186M | LLaMA-186M fp16 (baseline idéntica) | Ventaja |
 |---|---|---|---|
 | Val PPL WikiText-2 | **102** | 636 | **6.24×** |
-| Train PPL SlimPajama | **52** | — | — |
+| SlimPajama held-out PPL | **83.34** | 185.84 | **2.23×** |
+| SlimPajama train-chunk PPL (in-distribution, chunk_00000) | **74.46** | 170.85 | **2.29×** |
 | Gap train/val | **1.96×** | 3.81× | **49% menor** |
 | Throughput decode (B=1) | **501 tok/s** | 388 tok/s | **+29%** |
 | VRAM inferencia | **114 MB** | 1,031 MB | **−88.9%** |
