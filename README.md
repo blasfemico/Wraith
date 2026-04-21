@@ -127,16 +127,12 @@ Re-implementaciones independientes son bienvenidas — el paper está escrito pa
 ## Cómo citar
 
 ```bibtex
-@techreport{villena2026wraith,
-  author      = {Villena, Dante},
-  title       = {Wraith: A Native Pure Quantized Network (NPQN) —
-                 First Multipurpose LLM Trained from Scratch with
-                 100\% Integer Pipeline and Shannon-Optimal 9-Level
-                 Dualwire Quantization},
-  institution = {Independent research},
-  address     = {San Juan, Argentina},
-  year        = {2026},
-  url         = {https://github.com/blasfemico/Wraith}
+@misc{villena2026wraith,
+  author = {Villena, Dante},
+  title  = {Wraith: A Native Pure Quantized Network (NPQN) with Shannon-Optimal 9-Level Dualwire Quantization},
+  year   = {2026},
+  note   = {Independent research, San Juan, Argentina},
+  url    = {https://github.com/blasfemico/Wraith}
 }
 ```
 
