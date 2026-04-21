@@ -1,8 +1,12 @@
 <div align="center">
 
+<img src="assets/wraith-ghost-mark.png" alt="Wraith · Ghost Mark · WR-01 · Haunt Protocol" width="320" />
+
 # Wraith
 
 ### Native Pure Quantized Network (NPQN)
+
+*`SUBSTRATE · VESSEL · SIGNAL`*
 
 **Primer LLM multipropósito entrenado desde scratch con pipeline 100% integer y cuantización Dualwire de 9 niveles al límite de Shannon.**
 
