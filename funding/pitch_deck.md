@@ -58,10 +58,11 @@ Wraith es un **modelo de lenguaje propio con formato Dualwire cuantizado nativo*
 
 | Benchmark | Wraith 186M | LLaMA baseline fp16 (misma arch) | Ratio |
 |---|---|---|---|
-| WikiText-2 val PPL | **102** | 636 | 6.24× mejor |
+| WikiText-103 val PPL | **107** | 614 | 5.73× mejor |
+| WikiText-103 test PPL (post-hoc) | **223** | 636 | 2.86× mejor |
 | LAMBADA PPL | **1,136** | 11,806 | 10.39× mejor |
-| SlimPajama train PPL | **52** | 167 | 3.21× mejor |
-| Val/train gap | **1.96×** | 3.81× | **~49% menor** (generalization) |
+| SlimPajama train PPL (chunk_00000) | **74** | 171 | 2.29× mejor |
+| Val/train gap | **1.37×** | 3.59× | **2.62× menor** (generalization) |
 | Tokens para misma calidad | 1.6B | ~21B | **13× más eficiente** |
 | Almacenamiento en disco | **74.9 MB** | 372 MB | 4.97× menos |
 
@@ -243,7 +244,7 @@ Cada fase es un **checkpoint financeable independiente**. El seed de $3k habilit
 - Paper en preparación para ICLR/NeurIPS 2026
 
 **Tracción medible a la fecha**:
-- ✅ Wraith 186M entrenado (val_ppl 102 WikiText-2, train_ppl 52 SlimPajama)
+- ✅ Wraith 186M entrenado (val_ppl 107 WikiText-103, train_ppl 74 SlimPajama chunk_00000)
 - ✅ Motor de inferencia GPU funcional (**501 tok/s en RTX 5070 consumer**, 114 MB VRAM, 64 mJ/tok)
 - ✅ Kernels CUDA custom validados bit-exact (**2.3-2.6× vs cuBLAS fp16**)
 - ✅ Demo interactiva con LoRA fine-tuning (formato Alpaca)

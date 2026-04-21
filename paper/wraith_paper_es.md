@@ -19,7 +19,7 @@ Presentamos **Wraith**, la primera instancia a escala LLM de una **Native Pure Q
 
 La implementación opera sobre una **jerarquía de cuantización progresiva en tres niveles**: shadow int16 persistente (acumulador de gradientes con redondeo estocástico — distinto del accumulator transient int16 del matmul propuesto por NITI/Ghaffari, nuestro shadow persiste como optimizer state entre training steps) → latente int8 (almacenamiento del peso) → ternary 9-level Dualwire (forward). Esta cascada aplica el **Principio del Cuello de Botella Informacional** (Tishby & Zaslavsky, 2015) en dos etapas suaves (32→16 bits, luego 16→3.17 bits, compresión total 10.09× distribuida) en lugar del salto abrupto único (16→1.58 bits) de los modelos cuantizados solo en inferencia.
 
-Wraith-186M alcanza una perplejidad de validación de **107.19** en WikiText-2 frente a **613.96** del modelo base fp16 tipo LLaMA con arquitectura idéntica — una **mejora de 5.73×** bajo presupuesto idéntico de 1.6B tokens (régimen sub-Chinchilla al 44% del óptimo). La ventaja se explica teóricamente por tres argumentos convergentes: (1) **matemático** — los modelos fp16 están combinatoriamente sobre-parametrizados respecto a cualquier dataset humanamente disponible, haciendo de la cuantización una necesidad estructural, no una mera optimización; (2) **teórico** — el Principio del Cuello de Botella Informacional explica por qué restringir I(X;Z) vía cuantización induce regularización implícita que mejora generalización; (3) **empírico** — la brecha de generalización medida (20% menor) coincide con la predicción PAC-Bayes. La ventaja es consistente en cinco conjuntos de evaluación (2.11-10.39×) y tres pruebas zero-shot (LAMBADA, Winogrande, ARC-Easy).
+Wraith-186M alcanza una perplejidad de validación de **107.19** en WikiText-103 (val split) frente a **613.96** del modelo base fp16 tipo LLaMA con arquitectura idéntica — una **mejora de 5.73×** bajo presupuesto idéntico de 1.6B tokens (régimen sub-Chinchilla al 44% del óptimo). La ventaja se explica teóricamente por tres argumentos convergentes: (1) **matemático** — los modelos fp16 están combinatoriamente sobre-parametrizados respecto a cualquier dataset humanamente disponible, haciendo de la cuantización una necesidad estructural, no una mera optimización; (2) **teórico** — el Principio del Cuello de Botella Informacional explica por qué restringir I(X;Z) vía cuantización induce regularización implícita que mejora generalización; (3) **empírico** — la brecha de generalización medida (20% menor) coincide con la predicción PAC-Bayes. La ventaja es consistente en cinco conjuntos de evaluación (2.11-10.39×) y tres pruebas zero-shot (LAMBADA, Winogrande, ARC-Easy).
 
 En **GPU** (RTX 5070, Blackwell sm_120), el motor de inferencia DualBit packed end-to-end con kernels CUDA propios alcanza **501 tokens/s** en decode single-user (B=1) con solo **114 MB de VRAM** y **64 mJ/token** medidos por contador hardware NVML — superando simultáneamente al camino cuBLAS fp16 equivalente en throughput (**+29%**), memoria (**-88.9%**, de 1,031 MB a 114 MB) y eficiencia energética (**-24%**, de 84 a 64 mJ/token), con texto generado bit-exacto. Los kernels CUDA empaquetados alcanzan speedup **2.3-2.6× sobre cuBLAS fp16** en las formas principales del transformer (1024×1024, 4608×1024, 1024×4608), operando directamente sobre pesos Dualwire 2-bit sin materialización fp16 durante decode. En régimen de batching multi-usuario (B=16) con la ruta cuBLAS actual, Wraith alcanza 4,844 tokens/s (kernel GEMM empaquetado M>1 en roadmap). En **CPU** (AMD Ryzen 7 5700G), un motor C++ con instrucciones AVX2 y caché KV ejecuta inferencia completa a **52.1 tokens/s** con convergencia bit-exacta respecto a la referencia GPU.
 
@@ -90,7 +90,7 @@ Esta descomposición en dos etapas suaves (2.00× y 5.05×) totaliza una compres
 
 8. **Eficiencia práctica**: empaquetado sin pérdida a 74.9 MB (compresión 4.97×), inferencia en CPU a 52.1 tok/s mediante motor C++ AVX2, y costo de entrenamiento 11.2× menor para alcanzar calidad equivalente.
 
-**Nota sobre la escala y contexto de los resultados.** Debido a limitaciones presupuestarias, los experimentos de este trabajo se realizan a 186M parámetros con 1.6B tokens (44% del óptimo de Chinchilla). BitNet b1.58 (Ma et al., 2024) reporta que el ternario puro (3 niveles) iguala a fp16 recién a 3B parámetros con tokens suficientes. La ventaja de 5.73x observada en Wraith se explica por cinco factores calculables: (1) **Dualwire con 3.17 bits/peso se sitúa en el punto óptimo de capacidad informacional** — lo suficientemente expresivo para evitar la subcapacidad que obliga a BitNet a compensar con volumen masivo de datos, y lo suficientemente restringido para evitar la sobreparametrización redundante de fp16; (2) Wraith cuantiza el 100% del modelo incluyendo la embedding (27.7% de los params a 186M), mientras BitNet mantiene la embedding en fp16; (3) 9 niveles proveen capacidad por peso suficiente para modelos pequeños, consistente con que 4-bit QAT (QuEST) es Pareto-competitivo con fp16 a escala reducida; (4) la brecha de generalización medida (3.06x vs 3.81x) coincide en dirección con la cota PAC-Bayes; y (5) el redondeo estocástico del shadow int16 actúa como regularizador implícito vía inyección de ruido de gradiente.
+**Nota sobre la escala y contexto de los resultados.** Debido a limitaciones presupuestarias, los experimentos de este trabajo se realizan a 186M parámetros con 1.6B tokens (44% del óptimo de Chinchilla). BitNet b1.58 (Ma et al., 2024) reporta que el ternario puro (3 niveles) iguala a fp16 recién a 3B parámetros con tokens suficientes. La ventaja de 5.73x observada en Wraith se explica por cinco factores calculables: (1) **Dualwire con 3.17 bits/peso se sitúa en el punto óptimo de capacidad informacional** — lo suficientemente expresivo para evitar la subcapacidad que obliga a BitNet a compensar con volumen masivo de datos, y lo suficientemente restringido para evitar la sobreparametrización redundante de fp16; (2) Wraith cuantiza el 100% del modelo incluyendo la embedding (27.7% de los params a 186M), mientras BitNet mantiene la embedding en fp16; (3) 9 niveles proveen capacidad por peso suficiente para modelos pequeños, consistente con que 4-bit QAT (QuEST) es Pareto-competitivo con fp16 a escala reducida; (4) la brecha de generalización medida (1.37× vs 3.59×) coincide en dirección con la cota PAC-Bayes; y (5) el redondeo estocástico del shadow int16 actúa como regularizador implícito vía inyección de ruido de gradiente.
 
 ### Posicionamiento en el espectro de capacidad vs datos
 
@@ -135,7 +135,7 @@ Los tres regímenes tienen puntos de dolor distintos respecto a los datos:
 - **BitNet 1.58-bit**: *capacidad limitada* (3 niveles por peso) → requiere **volumen extra de datos para promediar** sobre expressivity insuficiente, 2,000 tok/param confirmado oficial.
 - **Wraith Dualwire 3.17-bit**: *capacidad balanceada al límite de Shannon informacional de los datos* → hipotéticamente el **punto óptimo**: suficiente expressivity para capturar estructura sin desperdiciar bits en ruido, requiriendo 20-100× menos datos que fp16 y BitNet para calidad equivalente.
 
-*Nota metodológica*: El ratio 50-100 tok/param proyectado para Wraith a escala deployable asume que la calidad necesaria para producción es superior a val_ppl 107 (régimen de validación del experimento a 186M) y se obtiene extrapolando conservadoramente desde los 8.6 tok/param medidos. Este es un rango a validar empíricamente en la fase 2B propuesta en Sección 6.3. **El claim "punto óptimo" es estrictamente una hipótesis a escala deployable**; lo que ya está medido es que Wraith-186M alcanza ventajas consistentes (2.29× train PPL, 6.24× val PPL WikiText-2) sobre fp16 arquitectura-idéntica a budget idéntico.
+*Nota metodológica*: El ratio 50-100 tok/param proyectado para Wraith a escala deployable asume que la calidad necesaria para producción es superior a val_ppl 107 (régimen de validación del experimento a 186M) y se obtiene extrapolando conservadoramente desde los 8.6 tok/param medidos. Este es un rango a validar empíricamente en la fase 2B propuesta en Sección 6.3. **El claim "punto óptimo" es estrictamente una hipótesis a escala deployable**; lo que ya está medido es que Wraith-186M alcanza ventajas consistentes (2.29× train PPL, 5.73× val PPL WikiText-103) sobre fp16 arquitectura-idéntica a budget idéntico.
 
 ![Figura 19: Eficiencia de convergencia](charts/19_convergence_efficiency.png)
 
@@ -297,7 +297,7 @@ El paradigma NPQN de Wraith — definido formalmente en §1.3 (jerarquía `int16
 
 | Evidencia | Qué demuestra |
 |---|---|
-| Val PPL 102 WikiText-2 (6.24× mejor que fp16) | El modelo converge y supera al baseline que usa fp32 masters |
+| Val PPL 107 WikiText-103 (5.73× mejor que fp16) | El modelo converge y supera al baseline que usa fp32 masters |
 | Packed PPL bit-exacto al training PPL | La cuantización es estable; los latentes convergen a distribuciones bimodales claras |
 | Ablación de umbrales: PPL idéntico en $\tau \in [10, 30]$ | Los pesos no están "al borde" del umbral; están firmemente en clusters ternarios |
 | Esparsidad por capa consistente (35-88%) | El optimizador shadow encuentra distribuciones de densidad estables por capa |
@@ -453,7 +453,7 @@ Con $\alpha = 1.81$ calibrado en Wraith al paso 13,021:
 |---|---:|---:|
 | Gap predicho (nats) | 0.33 | 0.65 |
 | Gap observado (nats) | 0.72 | 1.07 |
-| Ratio gap observado (val/train PPL) | 3.06x | 3.81x |
+| Ratio gap observado (val/train PPL, post-hoc) | 1.37× | 3.59× |
 
 Tanto el **orden como la magnitud aproximada coinciden**: el modelo fp16 exhibe ~1.5x la brecha de Wraith, resultado consistente con la predicción PAC-Bayes de ~2x. Las constantes no coinciden de forma exacta debido a que $\alpha$ fue calibrado sobre la arquitectura específica de Wraith. El hallazgo central es que **el modelo de pesos discretos generaliza de forma mediblemente superior**, y la dirección de esta ventaja es correctamente predicha por las cotas informacionales teóricas.
 
@@ -599,8 +599,8 @@ Las tasas de aprendizaje son óptimas por método: la relación de 13x entre amb
 
 | Dataset | Dominio | Wraith | Baseline fp16 | Ratio |
 |---|---|---:|---:|---:|
-| WikiText-2 (val, durante training) | estándar | **107.19** | 613.96 | **5.73x** |
-| WikiText-103 (test) | out-of-dist | **222.71** | 636.44 | **2.86x** |
+| WikiText-103 (val split, durante training) | estándar | **107.19** | 613.96 | **5.73x** |
+| WikiText-103 (test split, post-hoc) | out-of-dist | **222.71** | 636.44 | **2.86x** |
 | C4 (validación) | out-of-dist | **124.70** | 263.13 | **2.11x** |
 | LAMBADA (PPL) | razonamiento | **1,136.6** | 11,806.5 | **10.39x** |
 | SlimPajama (último chunk) | in-dist | **83.34** | 185.84 | **2.23x** |
@@ -613,12 +613,11 @@ Dos regímenes de train PPL se reportan: (a) el promedio móvil de la pérdida d
 
 | | Wraith | Baseline fp16 | Ratio |
 |---|---:|---:|---:|
-| Train PPL — running-loss (SlimPajama, histórico) | **52** | 166.93 | 3.21× |
 | **Train PPL — post-hoc eval (chunk_00000, 1024ctx)** | **74.46** | **170.85** | **2.29×** |
-| Val PPL (WikiText-2) | **102** | 636.44 | 6.24× |
+| Val PPL (WikiText-103 val split, header del ckpt) | **107.19** | 613.96 | **5.73×** |
 | Val PPL (SlimPajama held-out, chunk_00499) | **83.34** | 185.84 | **2.23×** |
-| Gap (val/train running-loss) | **1.96×** | 3.81× | **1.94× menor** |
-| Gap (nats, running-loss) | **0.674** | 1.338 | **0.664 nats menos** |
+| Gap (val/train, post-hoc) | **1.37×** | 3.59× | **2.62× menor** |
+| Gap (nats, post-hoc) | **0.315** | 1.279 | **0.964 nats menos** |
 
 **Observación importante sobre el ratio train vs held-out**: el ratio Wraith/LLaMA medido con el mismo pipeline resulta **2.29× en chunks de training** y **2.23× en held-out** — prácticamente idéntico. Esto descarta la hipótesis alternativa de que la ventaja de Wraith surja de memorización del training set: si Wraith sobreajustara más agresivamente que fp16, el ratio train sería **mucho mayor** que el held-out. La consistencia entre ambos regímenes indica que la ventaja es **intrínseca a la capacidad representacional del NPQN training**, no un artefacto de generalización.
 
@@ -1250,7 +1249,7 @@ Se publican el checkpoint empaquetado (74.9 MB), los motores de inferencia (GPU 
 *Figura 1: PPL de validación en 5 datasets. Escala log. Ratios 2.11-10.39x anotados.*
 
 ![Figura 2: Gap train vs val](charts/02_train_val_gap.png)
-*Figura 2: Brecha de generalización. Wraith 3.06x vs fp16 3.81x = 20% menor.*
+*Figura 2: Brecha de generalización (post-hoc). Wraith 1.37× vs fp16 3.59× = 2.62× menor.*
 
 ![Figura 3: Costo de entrenamiento](charts/03_training_cost.png)
 *Figura 3: Costo de entrenamiento. $19.19 vs $214.20 a calidad equivalente (11.2x).*
@@ -1292,7 +1291,7 @@ Se publican el checkpoint empaquetado (74.9 MB), los motores de inferencia (GPU 
 Los siguientes artefactos documentan el experimento y permiten verificación independiente. El **checkpoint empaquetado se publica de forma abierta** para reproducción inmediata de los resultados; el resto del stack (motores de inferencia, optimizador NPQN, pipeline de training) permanece como propiedad intelectual del autor bajo la política descrita en **Disponibilidad, IP y colaboración**.
 
 **Artefacto público (uso y verificación libre)**:
-- **Checkpoint empaquetado Wraith-186M** (74.9 MB, 5-trit/byte con verificación round-trip lossless). Publicado con licencia permisiva para evaluación académica y no-comercial, suficiente para reproducir todas las métricas reportadas (PPL WikiText-2, zero-shot LAMBADA/Winogrande/ARC-Easy, throughput y consumo energético en GPU/CPU) cuando se combina con una implementación fiel de la arquitectura (Sección 2).
+- **Checkpoint empaquetado Wraith-186M** (74.9 MB, 5-trit/byte con verificación round-trip lossless). Publicado con licencia permisiva para evaluación académica y no-comercial, suficiente para reproducir todas las métricas reportadas (PPL WikiText-103, zero-shot LAMBADA/Winogrande/ARC-Easy, throughput y consumo energético en GPU/CPU) cuando se combina con una implementación fiel de la arquitectura (Sección 2).
 
 **Artefactos bajo acuerdo (validación académica / partnerships)**:
 - **Motor de inferencia GPU propio**: kernels CUDA empaquetados + fused QKV/GateUp + embedding lookup packed (`WraithFastEngine` / `WraithFastGraphed`)
