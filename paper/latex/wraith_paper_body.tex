@@ -39,11 +39,11 @@ The implementation operates over a \textbf{three-level progressive
 quantization hierarchy}: persistent int16 shadow (gradient accumulator
 with stochastic rounding --- distinct from the transient int16 matmul
 accumulator proposed by NITI/Ghaffari; our shadow persists as optimizer
-state across training steps) → int8 latent (weight storage) → 9-level
+state across training steps) -> int8 latent (weight storage) -> 9-level
 Dualwire ternary (forward). This cascade applies the \textbf{Information
 Bottleneck Principle} (Tishby \& Zaslavsky, 2015) in two soft stages
-(32→16 bits, then 16→3.17 bits, for a distributed total compression of
-10.09×) rather than the single abrupt jump (16→1.58 bits) of
+(32->16 bits, then 16->3.17 bits, for a distributed total compression of
+10.09×) rather than the single abrupt jump (16->1.58 bits) of
 inference-only quantized models.
 
 Wraith-186M attains a WikiText-103 (val split) perplexity of
@@ -200,17 +200,17 @@ removing floating point from the weight pipeline. The compression
 hierarchy is:
 
 \begin{verbatim}
-    Shadow int16 (32 bits, a+b) → Int8 latent (16 bits) → Ternary (3.17 bits)
-           │                          │                          │
-           └── 2.00× compression ─────┘                          │
-                                      │                          │
-                                      └── 5.05× compression ─────┘
+    Shadow int16 (32 bits, a+b) -> Int8 latent (16 bits) -> Ternary (3.17 bits)
+           |                          |                          |
+           +-- 2.00× compression -----+                          |
+                                      |                          |
+                                      +-- 5.05× compression -----+
 \end{verbatim}
 
 This two-stage soft decomposition (2.00× and 5.05×) totals a progressive
 10.09× compression. In contrast, BitNet's inference-only approach
 applies an equivalent compression (10.09×) in a single abrupt jump (bf16
-→ ternary) during the forward pass, keeping the entire training backbone
+-> ternary) during the forward pass, keeping the entire training backbone
 in continuous bf16. \textbf{Wraith is 2.00× smoother per stage} --- a
 property we derive from the Information Bottleneck Principle (Tishby \&
 Zaslavsky, 2015) and validate empirically.
@@ -339,12 +339,7 @@ distinct ``pain point'' with respect to token efficiency}:
 scale}\label{empirical-evidence-of-token-consumption-at-deployable-scale}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1667}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -388,11 +383,7 @@ holds proportionally at scale, then the token budget to reach
 their own production conditions) projects as:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Scale
@@ -437,16 +428,16 @@ The three regimes have distinct pain points with respect to data:
 \begin{itemize}
 \tightlist
 \item
-  \textbf{fp16}: \emph{wastes capacity} (unnecessary precision bits) →
+  \textbf{fp16}: \emph{wastes capacity} (unnecessary precision bits) ->
   requires \textbf{extra data volume to compensate}, currently
   500--2,500 tok/param in modern production.
 \item
   \textbf{BitNet 1.58-bit}: \emph{limited capacity} (3 levels per
-  weight) → requires \textbf{extra data volume to average} over
+  weight) -> requires \textbf{extra data volume to average} over
   insufficient expressivity, 2,000 tok/param confirmed officially.
 \item
   \textbf{Wraith Dualwire 3.17-bit}: \emph{capacity balanced at the
-  informational Shannon limit of the data} → hypothetically the
+  informational Shannon limit of the data} -> hypothetically the
   \textbf{sweet spot}: enough expressivity to capture structure without
   wasting bits on noise, requiring 20--100× less data than fp16 and
   BitNet for equivalent quality.
@@ -466,10 +457,7 @@ budget.
 \textbf{Provenance of comparative datapoints (for auditability):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Value
@@ -514,7 +502,7 @@ data budget.
 \begin{figure}
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Figure 19: Convergence efficiency}]{charts/19_convergence_efficiency.png}}
-\caption{Figure 19: Convergence efficiency}
+\caption{Convergence efficiency}
 \end{figure}
 
 \emph{Figure 19: Wraith's positioning as the \textbf{capacity/data sweet
@@ -652,7 +640,7 @@ bits per weight} --- twice that of pure ternary (log2(3) = 1.58 bits).
 \begin{figure}
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Figure 11: Dualwire forward diagram}]{charts/11_dualwire_forward.png}}
-\caption{Figure 11: Dualwire forward diagram}
+\caption{Dualwire forward diagram}
 \end{figure}
 
 \emph{Figure 11: Dualwire forward pass. Int8 latent tensors are
@@ -739,11 +727,7 @@ memory.
 \textbf{Three-level precision hierarchy:}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3077}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Level
@@ -778,7 +762,7 @@ reduction}.
 \begin{figure}
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Figure 12: Training pipeline}]{charts/12_training_pipeline.png}}
-\caption{Figure 12: Training pipeline}
+\caption{Training pipeline}
 \end{figure}
 
 \emph{Figure 12: Wraith training pipeline. Forward: int8 latents are
@@ -816,7 +800,7 @@ each weight carries.
 \begin{figure}
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Figure 13: SoTT inference}]{charts/13_sott_inference.png}}
-\caption{Figure 13: SoTT inference}
+\caption{SoTT inference}
 \end{figure}
 
 \emph{Figure 13: SoTT decomposition for inference. Input x is passed
@@ -845,7 +829,7 @@ on 5 benchmarks).
 comparison}\label{npqn-training-empirical-validation-and-strategic-comparison}
 
 Wraith's NPQN paradigm --- formally defined in §1.3 (hierarchy
-\texttt{int16\ shadow\ →\ int8\ latent\ →\ ternary\ forward}) and
+\texttt{int16\ shadow\ ->\ int8\ latent\ ->\ ternary\ forward}) and
 implemented via the int16 shadow optimizer described in §2.3 --- fully
 removes floating point from the weight pipeline, in contrast to BitNet
 b1.58, which retains bf16 masters during training. This section provides
@@ -856,9 +840,7 @@ limits.
 \textbf{Empirical evidence of convergence:}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Evidence
@@ -936,13 +918,13 @@ first documented formalization of this dynamic.
 
 \begin{verbatim}
   (1) STE gradient to the latent:  dL/da[i,j] ∝ sc[j] / 127
-  (2) If many a[i,j] saturate (|a| → 127):
-      → mean(|a[:,j]|) grows → sc[j] = mean(|a|)/127 grows
+  (2) If many a[i,j] saturate (|a| -> 127):
+      -> mean(|a[:,j]|) grows -> sc[j] = mean(|a|)/127 grows
   (3) With larger sc[j]:
-      → dL/da grows (by step 1)
+      -> dL/da grows (by step 1)
   (4) With larger latent gradient:
-      → more latents saturate even faster
-  (5) Return to step 2 → vicious loop
+      -> more latents saturate even faster
+  (5) Return to step 2 -> vicious loop
 \end{verbatim}
 
 In the limit, \textbf{all latents saturate at ±127},
@@ -1005,16 +987,16 @@ Information Bottleneck Principle (Tishby \& Zaslavsky, 2015) as the
 \textbf{application of the principle at each level of the hierarchy}:
 
 \begin{verbatim}
-  I(X; Shadow int16)  →  I(X; Int8 latent)   →  I(X; Ternary)
+  I(X; Shadow int16)  ->  I(X; Int8 latent)   ->  I(X; Ternary)
      High (32 bits)        Medium (16 bits)      Low (3.17 bits)
      Preserves gradients   Filters fine noise    Preserves essentials only
 \end{verbatim}
 
-Each transition removes a specific type of information: shadow→latent
-discards fine numerical noise (factor 2.00×); latent→ternary discards
+Each transition removes a specific type of information: shadow->latent
+discards fine numerical noise (factor 2.00×); latent->ternary discards
 continuous magnitude while preserving direction (factor 5.05×). BitNet,
 by quantizing only at forward, applies the same total 10.09× factor
-\textbf{in a single abrupt jump} (bf16 → ternary), without the smooth
+\textbf{in a single abrupt jump} (bf16 -> ternary), without the smooth
 intermediate transition phase.
 
 The maximum per-stage compression is 5.05× in Wraith vs.~10.09× in
@@ -1140,7 +1122,7 @@ orthogonal mechanism for controlling activation magnitudes.
 \begin{figure}
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Figure 14: Full model architecture}]{charts/14_model_architecture.png}}
-\caption{Figure 14: Full model architecture}
+\caption{Full model architecture}
 \end{figure}
 
 \emph{Figure 14: Full Wraith-186M architecture. 8 transformer layers
@@ -1182,7 +1164,7 @@ under the same data budget.
 With \(\alpha = 1.81\) calibrated on Wraith at step 13,021:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lrr@{}}
+\begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 & Wraith & fp16 baseline \\
 \midrule\noalign{}
@@ -1223,12 +1205,7 @@ Contemporary small-to-medium open-source models are trained massively
 as of 2025:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1096}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1644}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2329}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1507}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3425}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -1357,8 +1334,8 @@ a substantial advantage (\textgreater15\% PPL) under the identical token
 budget.
 
 \textbf{Prediction 2 --- Gradual degradation with over-compression:} a
-progressive adjustment of native bits in Wraith (from 3.17 → 2.5 → 1.58
-→ 1 bit) should show \textbf{gradual} degradation proportional to
+progressive adjustment of native bits in Wraith (from 3.17 -> 2.5 -> 1.58
+-> 1 bit) should show \textbf{gradual} degradation proportional to
 \(C_\text{eff}\), not an abrupt drop. If the drop is abrupt before 1
 bit, the principle needs revision.
 
@@ -1506,10 +1483,7 @@ Seed & 0 \\
 }
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
@@ -1539,12 +1513,7 @@ higher learning rates than fp16 models (Ma et al., 2024).
 better.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1667}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2222}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2222}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Dataset
@@ -1586,11 +1555,7 @@ checkpoints --- this is the apples-to-apples comparison to confront
 Wraith with LLaMA-fp16 under an identical measurement protocol.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
@@ -1636,7 +1601,7 @@ with the PAC-Bayes prediction of Section 3.}
 \textbf{Table 3: Zero-shot accuracy.} Higher is better.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lrrr@{}}
+\begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 Benchmark & Chance & Wraith & fp16 baseline \\
 \midrule\noalign{}
@@ -1661,7 +1626,7 @@ to predict any last word correctly (0 of 500 samples), while Wraith hits
 Training throughput (measured on H100 (RunPod)):
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lrr@{}}
+\begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 & Wraith & fp16 baseline \\
 \midrule\noalign{}
@@ -1684,11 +1649,7 @@ making Wraith \textbf{11.2× cheaper at equivalent quality}.
 GPU reference costs (2026):
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3077}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 GPU
@@ -1724,12 +1685,7 @@ Compression}\label{storage-and-compression}
 \textbf{Table 4: Weight storage comparison.}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1500}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2500}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Format
@@ -1770,14 +1726,7 @@ M\textgreater1 GEMM kernel is not yet implemented.
 directly measured with NVML hardware counter.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1111}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}@{}}
+\begin{longtable}[]{@{}lllllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Configuration
@@ -1846,11 +1795,7 @@ only; the packed M\textgreater1 GEMM kernel is on the roadmap.
 Benchmarks segmented by integration level.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Full integrated engine
@@ -1903,12 +1848,7 @@ decision.
 estimate for CPU).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1579}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Hardware
@@ -1977,7 +1917,7 @@ model weights classified by the \texttt{(wa,\ wb)} combination that
 produces them:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}cclrr@{}}
+\begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 Level & \((w_a, w_b)\) & Value \(W\) & Count & Fraction \\
 \midrule\noalign{}
@@ -2098,7 +2038,7 @@ has four components:
 \item
   \textbf{End-to-end packed Dualwire embedding}. The embedding also
   remains packed at 2 bits (kernel \texttt{embed\_lookup\_packed} for
-  token\_id → fp16 row, same \texttt{ternary\_sott\_gemv\_packed} for
+  token\_id -> fp16 row, same \texttt{ternary\_sott\_gemv\_packed} for
   the tied-weight lm\_head). The materialized fp16 matrix
   (\textasciitilde100 MB in Wraith 186M) is never built in VRAM.
 \item
@@ -2114,12 +2054,7 @@ has four components:
 RTX 5070 Blackwell sm\_120).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1579}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Shape (N, K)
@@ -2155,7 +2090,7 @@ automatic fallback when \(N\) exceeds a threshold.
 \textbf{Table 10: Fused QKV vs.~3 separate kernels (shape 1024×1024).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lrrr@{}}
+\begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 Operation & Separate (3 launches) & Fused (1 launch) & Speedup \\
 \midrule\noalign{}
@@ -2177,11 +2112,7 @@ a single kernel already saturates and fusion only saves launch overhead
 more optimization.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Configuration
@@ -2219,12 +2150,7 @@ packed weights are never materialized to fp16 during decode.
 NVML hardware counter).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1579}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Configuration
@@ -2285,7 +2211,7 @@ use:
   \textbf{93 MB weights in VRAM}.
 \end{enumerate}
 
-The gap 5-trits/byte ↔ 2-bit runtime (0.4 vs.~0.5 bytes/param)
+The gap 5-trits/byte <-> 2-bit runtime (0.4 vs.~0.5 bytes/param)
 represents an \textbf{additional 20\% compression attainable} if we
 develop a kernel with an in-line 5-trits/byte decoder (roadmap Section
 6.3). VRAM reported in all projections below corresponds to
@@ -2298,15 +2224,7 @@ LLaMA-style architectures assumed. Runtime formula:
 \texttt{Total\ ≈\ 0.5·N\ (packed\ weights)\ +\ 0.5·V·d\ (packed\ emb)\ +\ KV\_fp16\ +\ overhead}.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1333}}@{}}
+\begin{longtable}[]{@{}llllllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Scale
@@ -2330,7 +2248,7 @@ fp16 equiv
 \bottomrule\noalign{}
 \endlastfoot
 \textbf{186M (measured)} & 1024×12×4608 & 93 MB & 25 MB & 6 MB (ctx=512)
-& 10 MB & \textbf{114 MB ✓} & \textasciitilde400 MB \\
+& 10 MB & \textbf{114 MB Y} & \textasciitilde400 MB \\
 Wraith 1B & 2048×18×8192 & 500 MB & 51 MB & 72 MB & 30 MB &
 \textbf{\textasciitilde0.65 GB} & \textasciitilde2.1 GB \\
 Wraith 2B & 2048×28×8192 & 1.0 GB & 51 MB & 112 MB & 50 MB &
@@ -2378,14 +2296,7 @@ Bytes/token read \(\approx\) 52 GB (weights + emb + KV + overhead).
 Assumed efficiency \(=\) 40\% of peak bandwidth.
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1111}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}@{}}
+\begin{longtable}[]{@{}lllllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 GPU
@@ -2442,7 +2353,7 @@ MI300X 192GB (AMD) & 192 GB & 5.3 TB/s & 2,120 GB/s & \textasciitilde41
 \item
   \textbf{With Dualwire-TQ (packed KV cache, roadmap §6.3)}: GPU--memory
   traffic per token would drop \textasciitilde20\% more (KV cache
-  \(\approx\) 1.6 GB → 400 MB for 100B), raising throughput to
+  \(\approx\) 1.6 GB -> 400 MB for 100B), raising throughput to
   \textasciitilde31 tok/s on H100 and \textasciitilde77 tok/s on B200 on
   the same GPU.
 \item
@@ -2492,12 +2403,7 @@ than fp16 mixed-precision}.
 \textbf{Table: Training cost comparison (training memory per param).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2353}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2353}}@{}}
+\begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Approach
@@ -2717,13 +2623,7 @@ across users.
 projection in Table 13 of §4.11:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1200}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2000}}
-  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2000}}@{}}
+\begin{longtable}[]{@{}llllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -2779,10 +2679,7 @@ infrastructure cost.
 \textbf{Training improvements (v2 core):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Feature
@@ -2813,10 +2710,7 @@ the per-method-optimal methodology \\
 \textbf{Inference acceleration (v2 kernels):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Feature
@@ -2845,10 +2739,7 @@ speeds \\
 \textbf{Architecture extensions (v2 research):}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Feature
@@ -2886,11 +2777,7 @@ We adapted and tested existing kernels operating on pure ternary
 weights:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3077}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Kernel
@@ -2930,11 +2817,7 @@ BitNet 1.58-bit), the custom kernels operate directly on 2-bit packed
 weights without fp16 materialization. Results on the same RTX 5070:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3077}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Kernel
@@ -2988,14 +2871,7 @@ grad checkpoint add \textasciitilde10--15\% to peak. Price: Colab Pro
 H100 @ \$1.80/hr effective.}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1333}}
-  >{\centering\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1667}}
-  >{\centering\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1667}}
-  >{\centering\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1667}}@{}}
+\begin{longtable}[]{@{}lllllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -3044,13 +2920,7 @@ baseline: 2 bytes/param + KV. KV computed with d\_head=128, ctx=16k,
 fp16 (K+V).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1200}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2000}}
-  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2000}}@{}}
+\begin{longtable}[]{@{}llllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -3099,13 +2969,7 @@ Runtime weights stay at current 0.5 bytes/param (a 5-trits/byte-decoder
 kernel would drop weights to 0.4 B/param, -20\% additional).}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1200}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
-  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2000}}
-  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2000}}@{}}
+\begin{longtable}[]{@{}llllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -3116,7 +2980,7 @@ Wraith v2 runtime (KV-TQ)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 fp16 runtime
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-v1→v2 improvement
+v1->v2 improvement
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 vs.~fp16
 \end{minipage} \\
@@ -3144,13 +3008,7 @@ eviction of irrelevant tokens), Wraith dominates the long-context
 regime. GPUs assume H100 80GB datacenter.}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1250}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
-  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2083}}@{}}
+\begin{longtable}[]{@{}llllll@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
@@ -3316,9 +3174,9 @@ convergent arguments:
   \textbf{Theoretical argument.} The Information Bottleneck Principle
   (Tishby \& Zaslavsky, 2015) predicts that restricting I(X; Z) produces
   implicit regularization. Wraith applies this principle as a
-  \textbf{progressive hierarchy} (32→16→3.17 bits, 2.00× and 5.05×
+  \textbf{progressive hierarchy} (32->16->3.17 bits, 2.00× and 5.05×
   compression in two stages), in contrast to the single abrupt-stage
-  approach (16→1.58 bits, 10.09× compression in one jump) of
+  approach (16->1.58 bits, 10.09× compression in one jump) of
   inference-only quantized models. This hierarchical bottleneck is, to
   our knowledge, novel in the literature.
 \item

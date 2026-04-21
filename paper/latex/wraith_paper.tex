@@ -1,19 +1,66 @@
 % Wraith: a Native Pure Quantized Network (NPQN)
 % Author: Dante Villena (Independent Researcher)
 % Target: arXiv submission (cs.CL primary, cs.LG + cs.AI cross-list)
+%
+% COMPILE WITH pdflatex (two passes).
+% If you get Unicode errors try xelatex or lualatex instead.
 
 \documentclass[11pt]{article}
 
-% ── Standard arxiv-friendly preamble ──────────────────────────────
+% ── Encoding / fonts ──────────────────────────────────────────────
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage{textcomp}
+
+% ── Unicode characters that pandoc sometimes emits ────────────────
+% pdflatex doesn't handle them natively; declare the ones actually used.
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2209}{\ensuremath{\notin}}
+\DeclareUnicodeCharacter{221D}{\ensuremath{\propto}}
+\DeclareUnicodeCharacter{2211}{\ensuremath{\sum}}
+\DeclareUnicodeCharacter{2212}{-}
+\DeclareUnicodeCharacter{2218}{\ensuremath{\circ}}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+\DeclareUnicodeCharacter{2190}{\ensuremath{\leftarrow}}
+\DeclareUnicodeCharacter{2194}{\ensuremath{\leftrightarrow}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}
+\DeclareUnicodeCharacter{00B1}{\ensuremath{\pm}}
+\DeclareUnicodeCharacter{03B1}{\ensuremath{\alpha}}
+\DeclareUnicodeCharacter{03B2}{\ensuremath{\beta}}
+\DeclareUnicodeCharacter{03B3}{\ensuremath{\gamma}}
+\DeclareUnicodeCharacter{03B4}{\ensuremath{\delta}}
+\DeclareUnicodeCharacter{03B5}{\ensuremath{\epsilon}}
+\DeclareUnicodeCharacter{03C3}{\ensuremath{\sigma}}
+\DeclareUnicodeCharacter{03C4}{\ensuremath{\tau}}
+\DeclareUnicodeCharacter{03C0}{\ensuremath{\pi}}
+\DeclareUnicodeCharacter{03BC}{\ensuremath{\mu}}
+\DeclareUnicodeCharacter{03BB}{\ensuremath{\lambda}}
+\DeclareUnicodeCharacter{03B8}{\ensuremath{\theta}}
+\DeclareUnicodeCharacter{2500}{-}
+\DeclareUnicodeCharacter{2502}{|}
+\DeclareUnicodeCharacter{2514}{L}
+\DeclareUnicodeCharacter{2518}{J}
+\DeclareUnicodeCharacter{250C}{+}
+\DeclareUnicodeCharacter{2510}{+}
+\DeclareUnicodeCharacter{251C}{+}
+\DeclareUnicodeCharacter{2524}{+}
+\DeclareUnicodeCharacter{252C}{+}
+\DeclareUnicodeCharacter{2534}{+}
+\DeclareUnicodeCharacter{253C}{+}
+
+% ── Layout / packages ─────────────────────────────────────────────
 \usepackage[margin=1in]{geometry}
 \usepackage{microtype}
 \usepackage{hyperref}
-\hypersetup{colorlinks=true, linkcolor=blue!50!black, citecolor=blue!50!black, urlcolor=blue!60!black}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, citecolor=blue!50!black, urlcolor=blue!60!black, breaklinks=true}
 \usepackage{graphicx}
-\graphicspath{{../charts/}{charts/}}
+\graphicspath{{charts/}{../charts/}}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{booktabs}
@@ -21,6 +68,7 @@
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage{multirow}
+\usepackage{calc}           % required for pandoc's \real macro in table widths
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf}
 \usepackage{listings}
@@ -31,21 +79,33 @@
   frame=single,
   backgroundcolor=\color{gray!8},
   rulecolor=\color{gray!40},
-  numberstyle=\tiny\color{gray},
-  captionpos=b,
 }
 \usepackage{enumitem}
 \setlist{nosep}
-\usepackage{setspace}
-\onehalfspacing
 
-% Pandoc-generated commands (required if pandoc emitted them)
+% Pandoc-generated commands
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \providecommand{\passthrough}[1]{#1}
+% pandoc's \real for table widths expects \usepackage{calc}
+\providecommand{\real}[1]{#1}
+% Pandoc emits \pandocbounded{\includegraphics{...}} to bound images.
+% Default fallback: force all bounded figures to a max width of \linewidth
+% (prevents graphics from overflowing the page).
+\usepackage{adjustbox}
+\providecommand{\pandocbounded}[1]{\noindent\adjustbox{max width=\linewidth}{#1}}
 
-% ── Title, authors, abstract ──────────────────────────────────────
+% Relax overfull box warnings a bit so long tables don't explode
+\setlength{\emergencystretch}{3em}
+\tolerance=1000
+
+% The paper's original Markdown has its own section numbers in the heading text
+% (e.g. "## 2. Wraith Architecture", "### 2.4 SoTT"). Disable LaTeX's automatic
+% section numbering so we don't get double-numbered ("0.2.4 2.4 SoTT").
+\setcounter{secnumdepth}{0}
+
+% ── Title, author, abstract ───────────────────────────────────────
 \title{%
-  Wraith: a Native Pure Quantized Network (NPQN) \\
+  Wraith: a Native Pure Quantized Network (NPQN) \\[0.4em]
   \large First Multipurpose LLM Trained from Scratch with \\
          100\% Integer Pipeline and Shannon-Optimal 9-Level Dualwire Quantization
 }
@@ -56,12 +116,6 @@
 
 \begin{document}
 \maketitle
-
-% ── Paste body from wraith_paper_body.tex below ──────────────────
-% The body file is generated by pandoc from the markdown source:
-%   pandoc wraith_paper_en.md -o latex/wraith_paper_body.tex \
-%          --top-level-division=section
-% To rebuild: re-run the command above, then compile this file.
 
 \input{wraith_paper_body.tex}
 
