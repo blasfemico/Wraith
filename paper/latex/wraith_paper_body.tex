@@ -501,7 +501,7 @@ data budget.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 19: Convergence efficiency}]{charts/19_convergence_efficiency.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/19_convergence_efficiency.png}
 \caption{Convergence efficiency}
 \end{figure}
 
@@ -639,7 +639,7 @@ bits per weight} --- twice that of pure ternary (log2(3) = 1.58 bits).
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 11: Dualwire forward diagram}]{charts/11_dualwire_forward.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/11_dualwire_forward.png}
 \caption{Dualwire forward diagram}
 \end{figure}
 
@@ -761,7 +761,7 @@ reduction}.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 12: Training pipeline}]{charts/12_training_pipeline.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/12_training_pipeline.png}
 \caption{Training pipeline}
 \end{figure}
 
@@ -799,7 +799,7 @@ each weight carries.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 13: SoTT inference}]{charts/13_sott_inference.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/13_sott_inference.png}
 \caption{SoTT inference}
 \end{figure}
 
@@ -1121,7 +1121,7 @@ orthogonal mechanism for controlling activation magnitudes.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 14: Full model architecture}]{charts/14_model_architecture.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/14_model_architecture.png}
 \caption{Full model architecture}
 \end{figure}
 
@@ -2448,27 +2448,27 @@ effective precision (E{[}round\_stochastic(x){]} = x). This technique is
 validated at 186M; its viability at 70B+ scales is future work (Section
 6.3, AGN).}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 15: Training VRAM vs.~scale}]{charts/15_training_vram_scaling.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/15_training_vram_scaling.png}
 \emph{Figure 15: Training VRAM (GB) vs.~model scale (log--log).
 Horizontal dashed lines mark hardware limits (1×/2×/8× H100). Wraith (6
 B/param, blue) diverges significantly from fp16 (16 B/param, red) and
 BitNet (18 B/param, orange) from 7B onward. Wraith fits in 1× H100 up to
 13B; fp16 and BitNet need 2+ H100s from 5B.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 16: Inference VRAM vs.~scale}]{charts/16_inference_vram_scaling.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/16_inference_vram_scaling.png}
 \emph{Figure 16: Inference VRAM (weights only, GB) vs.~scale (log--log).
 Consumer and data-center GPU limits marked. At 70B: Wraith packed = 28
 GB (1× H100), fp16 = 140 GB (2× H100). At 1T: Wraith = 400 GB (5× H100),
 fp16 = 2 TB (25× H100). BitNet is 2× more compact than Wraith in
 inference but 3× more expensive in training (Figure 15).}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 17: Training cost vs.~scale}]{charts/17_training_cost_scaling.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/17_training_cost_scaling.png}
 \emph{Figure 17: Chinchilla-optimal training cost in USD (Colab H100 @
 \$1.80/hr) vs.~scale (log--log). Wraith is consistently 2× cheaper than
 fp16 at every scale thanks to the int8 path with 2× throughput on H100
 data-center.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 18: Bytes per parameter}]{charts/18_bytes_per_param.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/18_bytes_per_param.png}
 \emph{Figure 18: Direct comparison of bytes per parameter. Left:
 training --- Wraith 6 B/param, fp16 16 B/param, BitNet 18 B/param
 (BitNet is the MOST expensive in training). Right: inference --- BitNet
@@ -3359,51 +3359,51 @@ Residual Quantization. AAAI 2023.
 
 \subsection{Appendix A: Figures}\label{appendix-a-figures}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 1: PPL across 5 datasets}]{charts/01_val_ppl_5datasets.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/01_val_ppl_5datasets.png}
 \emph{Figure 1: Validation PPL across 5 datasets. Log scale. Ratios
 2.11--10.39× annotated.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 2: Train vs.~val gap}]{charts/02_train_val_gap.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/02_train_val_gap.png}
 \emph{Figure 2: Generalization gap (post-hoc). Wraith 1.37× vs.~fp16
 3.59× = 2.62× smaller.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 3: Training cost}]{charts/03_training_cost.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/03_training_cost.png}
 \emph{Figure 3: Training cost. \$19.19 vs.~\$214.20 at equivalent
 quality (11.2×).}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 4: Energy per token}]{charts/04_energy_per_token.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/04_energy_per_token.png}
 \emph{Figure 4: Energy per token measured by NVML hardware counter.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 5: Zero-shot}]{charts/05_zero_shot.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/05_zero_shot.png}
 \emph{Figure 5: Zero-shot accuracy across 3 benchmarks.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 6: Inference stacks}]{charts/06_inference_stacks.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/06_inference_stacks.png}
 \emph{Figure 6: CPU + GPU inference throughput, log scale.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 7: Storage compression}]{charts/07_storage.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/07_storage.png}
 \emph{Figure 7: 4.97× compression, 98.2\% of Shannon limit, lossless
 bit-exact.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 8: Threshold ablation}]{charts/09_ablation_threshold.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/09_ablation_threshold.png}
 \emph{Figure 8: Identical PPL across 5 threshold configurations (10/6 to
 30/18).}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 9: Per-layer sparsity}]{charts/10_ablation_sparsity.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/10_ablation_sparsity.png}
 \emph{Figure 9: Active density per layer. L0: 35--45\%, L7: 85--88\%.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 11: Dualwire forward}]{charts/11_dualwire_forward.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/11_dualwire_forward.png}
 \emph{Figure 11: 9-level Dualwire forward diagram.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 12: Training pipeline}]{charts/12_training_pipeline.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/12_training_pipeline.png}
 \emph{Figure 12: STE + Shadow Int16 optimizer pipeline.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 13: SoTT inference}]{charts/13_sott_inference.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/13_sott_inference.png}
 \emph{Figure 13: SoTT inference decomposition.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 14: Model architecture}]{charts/14_model_architecture.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/14_model_architecture.png}
 \emph{Figure 14: Full Wraith-186M architecture.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 20: Scaling projection}]{charts/20_scaling_projection.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/20_scaling_projection.png}
 \emph{Figure 20: Scaling projection in the style of BitNet Fig. 3.
 Wraith measured at 186M/1.6B (blue circle) + arch-identical fp16 LLaMA
 baseline measured (red square). Blue curve = Wraith projection via
@@ -3416,7 +3416,7 @@ Wraith 700M/100B ≈ 11.4 PPL. Note: BitNet b1.58 only reaches fp16 parity
 at 3B; our projection suggests Wraith could do so at much smaller
 scales, but this requires empirical validation at 700M+.}
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 21: Pareto frontier}]{charts/21_pareto_frontier.png}}
+\includegraphics[width=\linewidth,keepaspectratio]{charts/21_pareto_frontier.png}
 \emph{Figure 21: Pareto frontier capacity vs quality at
 \textasciitilde3B scale. X-axis = bits per weight (log), Y-axis = PPL.
 Measured points: BitNet b1.58 (1.58 bits, 9.91 PPL) and LLaMA fp16 (16
