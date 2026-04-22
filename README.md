@@ -20,6 +20,29 @@
 
 ---
 
+## ⚠️ Nota de estado (v1.1 — abril 2026)
+
+El **5.73× de ventaja sobre fp16** reportado en este repo se obtuvo con una configuración cuyos **hiperparámetros y algunas elecciones arquitectónicas no estaban tuneados a las mejores prácticas modernas de LLMs** (warmup deshabilitado, weight decay 0.01, setup de capas que reflejaba iteraciones anteriores del codebase en vez de los defaults actuales de Pythia/LLaMA). Con un baseline fp16 tuneado a estándares modernos el margen esperable es menor.
+
+**Por eso estamos ejecutando nuevas validaciones antes del arxiv final:**
+
+1. **Baseline Pythia-style multi-seed** (n=5): arquitectura + hiperparámetros Pythia-160M exactos (LayerNorm + GELU + partial RoPE + warmup 1% + weight decay 0.1 + cosine schedule + grad clip 1.0) al mismo presupuesto de 1.6B tokens. Reportaremos `mean ± std` de val PPL.
+2. **Wraith v2 modernizado**: mismo core NPQN pero emparejado con opciones modernas de best-practice — RMSNorm, SwiGLU, full RoPE, Grouped Query Attention (16:4), z-loss de Gemma2, hiperparámetros Pythia-matched. Comparación apples-to-apples más limpia.
+
+El nuevo número probablemente será menor a 5.73× pero seguirá siendo positivo, y más importante, **defendible bajo baselines modernos**.
+
+Los **números puramente medidos** no dependen del baseline comparativo y se mantienen:
+
+- **74.9 MB** checkpoint empaquetado (98.2% del límite de Shannon, bit-exacto)
+- **501 tok/s** decode en RTX 5070 @ **114 MB VRAM** @ **64 mJ/token**
+- **52.1 tok/s** CPU inference (AMD Ryzen 7 5700G, AVX2)
+- **Kernels CUDA propios 2.38–2.59×** sobre cuBLAS fp16
+- **Integer-only training converge a 186M** (hecho empírico independiente del baseline)
+
+La contribución conceptual (NPQN taxonomy, shadow int16 optimizer, DSSC failure mode + ASR fix, Dualwire 9-level) **no depende del headline comparativo**. El próximo update del README y paper reportará los nuevos baselines con transparencia total.
+
+---
+
 ## ¿Qué es Wraith?
 
 Wraith es la primera instancia concreta de una clase arquitectónica nueva: **Native Pure Quantized Network (NPQN)**. Un LLM que cumple **simultáneamente** tres propiedades que ningún trabajo previo combina a escala LLM y desde scratch:

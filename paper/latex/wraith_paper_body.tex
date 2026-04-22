@@ -1,4 +1,83 @@
-\begin{abstract}
+\subsection{Methodological Status (v1.1 --- April 2026,
+pre-arXiv)}\label{methodological-status-v1.1-april-2026-pre-arxiv}
+
+\textbf{Transparency note about the current baseline comparison.} The
+\emph{5.73× improvement over an architecturally-identical fp16 baseline}
+reported in this draft was obtained with a training configuration whose
+\textbf{hyperparameters and some architectural choices were not tuned to
+modern LLM best practice}. Specifically, the current fp16 baseline used
+a warmup-free schedule, weight decay of 0.01, and a non-standard layer
+configuration that reflected older iterations of the codebase rather
+than the settings that a well-tuned fp16 reference (e.g.~Pythia-160M,
+LLaMA-style setups) would use in 2024--2026. Under tighter, more modern
+hyperparameters and cleaner architectural choices, the same fp16
+baseline would likely reach a noticeably lower perplexity, which would
+\textbf{reduce the headline margin}.
+
+For this reason, the current draft is \emph{not the final version}.
+Before arXiv submission we are completing two additional validation
+runs:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Pythia-style multi-seed baseline} (n = 5). Architecture and
+  hyperparameters strictly matched to the official Pythia-160M recipe
+  (LayerNorm, GELU MLP, partial RoPE, parallel residual, warmup 1 \%,
+  weight decay 0.1, cosine decay to 0.1× peak, gradient clipping 1.0).
+  Same 1.6B-token budget, same data, per-seed variance reported.
+\item
+  \textbf{Wraith v2 with modernized backbone}. Keeps the NPQN core
+  (Dualwire 9-level, int8 latents, shadow int16 optimizer with
+  stochastic rounding) and pairs it with modern best-practice choices:
+  RMSNorm pre-norm, SwiGLU, full 100 \% RoPE, Grouped Query Attention
+  (16:4), z-loss regularization (Gemma2-style), and Pythia-matched
+  optimizer settings. This eliminates confounds from the older
+  architectural choices used in v1 and gives a cleaner apples-to-apples
+  comparison.
+\end{enumerate}
+
+The next revision of this paper will report both new baselines with full
+multi-seed statistics and a revised headline factor. The updated
+comparison is expected to be lower than 5.73× but still positive, and
+--- more importantly --- defensible under modern best-practice
+baselines.
+
+\textbf{What is not affected by this revision.} Several results of this
+work are independent of the baseline comparison and remain stable:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{74.9 MB packed checkpoint}, 98.2 \% of the Shannon limit,
+  bit-exact lossless (§ 4.7).
+\item
+  \textbf{Inference throughput}: 501 tokens/s decode on RTX 5070 at 114
+  MB VRAM and 64 mJ/token (§ 4.9, § 4.10).
+\item
+  \textbf{CPU inference}: 52.1 tokens/s on AMD Ryzen 7 5700G via AVX2
+  engine (§ 4.10).
+\item
+  \textbf{Custom CUDA kernels}: 2.38--2.59× speedup over cuBLAS fp16 on
+  the dominant Q/K/V/O/gate/up/down shapes.
+\item
+  \textbf{Empirical fact that 100 \% integer training converges at 186M}
+  (not a comparison, a measurement).
+\item
+  \textbf{NPQN architectural taxonomy, shadow int16 optimizer design,
+  DSSC failure mode identification, ASR fix} --- all conceptual
+  contributions that do not depend on a specific fp16 reference.
+\end{itemize}
+
+Readers should interpret the current 5.73× figure as a \emph{preliminary
+number under a suboptimally tuned fp16 baseline}, not a claim about
+Wraith versus best-achievable fp16. The revised version will quantify
+how the headline moves under tighter, modern baselines.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Abstract}\label{abstract}
+
 We present \textbf{Wraith}, the first LLM-scale instance of a
 \textbf{Native Pure Quantized Network (NPQN)} --- a new architectural
 class that simultaneously satisfies three properties which, while each
@@ -90,7 +169,8 @@ zero-shot, throughput, energy). The inference engines (GPU/CPU) and the
 NPQN training pipeline remain reserved as the author's intellectual
 property, available under academic or commercial license as appropriate
 (see Appendix B: Availability, IP and collaboration).
-\end{abstract}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{1. Introduction}\label{introduction}
 

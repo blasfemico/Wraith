@@ -7,6 +7,31 @@ $^2$ Asistente de programación IA utilizado para generación de código, benchm
 
 ---
 
+## Estado Metodológico (v1.1 — abril 2026, pre-arXiv)
+
+**Nota de transparencia sobre la comparación con baseline.** El *5.73× de mejora sobre un baseline fp16 arquitectura-idéntica* reportado en este borrador se obtuvo con una configuración de entrenamiento cuyos **hiperparámetros y algunas elecciones arquitectónicas no estaban tuneadas a las mejores prácticas modernas de LLMs**. En particular, el baseline fp16 actual usó un schedule sin warmup, weight decay de 0.01, y una configuración de capas no estándar que reflejaba iteraciones antiguas del codebase en vez de los settings que una referencia fp16 bien tuneada (por ejemplo Pythia-160M, setups LLaMA-style) usaría en 2024–2026. Con hiperparámetros más estrictos y modernos, y elecciones arquitectónicas más limpias, el mismo baseline fp16 probablemente alcanzaría una perplejidad notablemente menor, lo que **reduciría el margen de titular**.
+
+Por esa razón, este borrador *no es la versión final*. Antes del submission a arXiv estamos completando dos runs adicionales de validación:
+
+1. **Baseline Pythia-style multi-seed** (n = 5). Arquitectura e hiperparámetros estrictamente ajustados a la receta oficial de Pythia-160M (LayerNorm, GELU MLP, partial RoPE, parallel residual, warmup 1 %, weight decay 0.1, cosine decay a 0.1× peak, grad clipping 1.0). Mismo presupuesto de 1.6B tokens, mismos datos, varianza per-seed reportada.
+
+2. **Wraith v2 con backbone modernizado**. Mantiene el core NPQN (Dualwire 9-level, int8 latents, shadow int16 optimizer con redondeo estocástico) y lo acopla a elecciones modernas de best-practice: RMSNorm pre-norm, SwiGLU, full RoPE 100 %, Grouped Query Attention (16:4), regularización z-loss (estilo Gemma2), y optimizer Pythia-matched. Esto elimina confounds de las elecciones arquitectónicas viejas usadas en v1 y entrega una comparación apples-to-apples más limpia.
+
+La próxima revisión del paper reportará ambos nuevos baselines con estadísticas multi-seed completas y un factor de titular revisado. Se espera que el nuevo número sea menor a 5.73× pero aún positivo — y, más importante, defendible bajo baselines modernos de best-practice.
+
+**Lo que NO depende de esta revisión.** Varios resultados de este trabajo son independientes de la comparación con baseline y se mantienen estables:
+
+- **Checkpoint empaquetado de 74.9 MB**, al 98.2 % del límite de Shannon, bit-exacto sin pérdida (§ 4.7).
+- **Throughput de inferencia**: 501 tokens/s de decode en RTX 5070 a 114 MB VRAM y 64 mJ/token (§ 4.9, § 4.10).
+- **Inferencia CPU**: 52.1 tokens/s en AMD Ryzen 7 5700G via motor AVX2 (§ 4.10).
+- **Kernels CUDA propios**: 2.38–2.59× speedup sobre cuBLAS fp16 en las formas dominantes Q/K/V/O/gate/up/down.
+- **Hecho empírico de que el training 100 % integer converge a 186M** (no una comparación, una medición).
+- **Taxonomía arquitectónica NPQN, diseño del shadow int16 optimizer, identificación del failure mode DSSC, fix ASR** — todas contribuciones conceptuales que no dependen de una referencia fp16 específica.
+
+Los lectores deben interpretar el 5.73× actual como un *número preliminar bajo un baseline fp16 sub-tuneado*, no como un claim de Wraith vs. mejor fp16 posible. La versión revisada cuantificará cómo se mueve el titular bajo baselines modernos más estrictos.
+
+---
+
 ## Resumen
 
 Presentamos **Wraith**, la primera instancia a escala LLM de una **Native Pure Quantized Network (NPQN)** — una nueva clase arquitectónica que satisface simultáneamente tres propiedades que, si bien existen de forma aislada en trabajos previos, nunca han sido combinadas en un LLM multipropósito entrenado desde scratch:
