@@ -4,11 +4,10 @@
 
 # Wraith
 
-### Native Pure Quantized Network (NPQN)
 
 *`SUBSTRATE · VESSEL · SIGNAL`*
 
-**Primer LLM multipropósito entrenado desde scratch con pipeline 100% integer y cuantización Dualwire de 9 niveles al límite de Shannon.**
+** LLM multipropósito entrenado desde scratch con cuantización de escalas de 9 niveles al límite de Shannon.**
 
 <img src="https://img.shields.io/badge/clase-NPQN-FF003C?style=for-the-badge&labelColor=0A0A0A" />
 <img src="https://img.shields.io/badge/pesos-Dualwire%209--level-39FF14?style=for-the-badge&labelColor=0B3D0B" />
